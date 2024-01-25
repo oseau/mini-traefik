@@ -1,0 +1,14 @@
+http:
+  routers:
+    my-router:
+      rule: "Host(`local.{{ env "DOMAIN" }}`)"
+      service: "my-service"
+      entryPoints:
+        - "websecure"
+      tls:
+        certResolver: "myresolver"
+  services:
+    my-service:
+      loadBalancer:
+        servers:
+          - url: "http://host.docker.internal:8080"

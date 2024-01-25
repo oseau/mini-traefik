@@ -5,10 +5,13 @@ services:
   traefik:
     image: "traefik:v2.10"
     container_name: "traefik"
+    environment:
+      - DOMAIN=${DOMAIN} # for traefik_dynamic.yml
     command:
       - "--accessLog=true"
       - "--providers.docker=true"
       - "--providers.docker.exposedbydefault=false"
+      - "--providers.file.filename=/etc/traefik/traefik_dynamic.yml"
       - "--entrypoints.web.address=:80"
       - "--entrypoints.web.http.redirections.entrypoint.to=websecure"
       - "--entrypoints.web.http.redirections.entrypoint.scheme=https"
@@ -22,6 +25,9 @@ services:
     volumes:
       - "./letsencrypt:/letsencrypt"
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
+      - "./traefik_dynamic.yml:/etc/traefik/traefik_dynamic.yml"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     networks:
       - traefik-proxy
 
