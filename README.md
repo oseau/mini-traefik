@@ -10,3 +10,13 @@ A minimal [Traefik](https://traefik.io/) setup for Https certificates generation
 4. Run `make rsync` to push the configuration to server.
 5. Run `make start` to (re)start the containers.
 6. Wait a bit for the certificates to be generated, and then you should be able to access your services through https.
+
+### ufw
+
+```bash
+sudo ufw allow OpenSSH
+sudo ufw allow http
+sudo ufw allow https
+sudo ufw allow from 172.18.0.0/16 # check this by `docker network inspect traefik-proxy`
+sudo ufw enable
+```
